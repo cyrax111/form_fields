@@ -24,7 +24,7 @@ class SliderPicker<T> extends StatefulWidget {
   final int? divisions;
   final T? initValue;
   final T min, max;
-  final void Function(T value) onChanged;
+  final void Function(T value)? onChanged;
   final SliderPickerAdaptor<T> adaptor;
 
   final InputDecoration? decoration;
@@ -68,12 +68,14 @@ class _SliderPickerState<T> extends State<SliderPicker<T>> {
               min: min,
               max: max,
               divisions: widget.divisions,
-              onChanged: (double val) {
-                setState(() {
-                  value = val;
-                  widget.onChanged(widget.adaptor.fromDouble(value));
-                });
-              },
+              onChanged: widget.onChanged == null
+                  ? null
+                  : (double val) {
+                      setState(() {
+                        value = val;
+                        widget.onChanged!(widget.adaptor.fromDouble(value));
+                      });
+                    },
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
